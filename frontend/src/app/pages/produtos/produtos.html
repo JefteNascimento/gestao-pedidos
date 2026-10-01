@@ -1,0 +1,116 @@
+<h1>Produtos</h1>
+@if (mensagem) {
+
+  <div
+    class="mensagem"
+    [class.sucesso]="tipoMensagem === 'sucesso'"
+    [class.erro]="tipoMensagem === 'erro'"
+  >
+    {{ mensagem }}
+  </div>
+
+}
+<form (ngSubmit)="salvarProduto()">
+
+  <label>
+    Nome:
+    <input
+      type="text"
+      name="nome"
+      [(ngModel)]="novoProduto.nome"
+      required
+    >
+  </label>
+
+  <label>
+    Preço:
+    <input
+      type="number"
+      name="preco"
+      [(ngModel)]="novoProduto.preco"
+      min="0.01"
+      step="0.01"
+      required
+    >
+  </label>
+
+  <button type="submit">
+    @if (produtoEditandoId !== null) {
+      Salvar alteração
+    } @else {
+      Cadastrar
+    }
+  </button>
+
+  @if (produtoEditandoId !== null) {
+    <button
+      type="button"
+      (click)="limparFormulario()"
+    >
+      Cancelar
+    </button>
+  }
+
+</form>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Preço</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    @for (produto of produtos; track produto.id) {
+
+      <tr>
+
+        <td>{{ produto.id }}</td>
+
+        <td>{{ produto.nome }}</td>
+
+        <td>R$ {{ produto.preco }}</td>
+
+        <td>
+          @if (produto.ativo) {
+            Ativo
+          } @else {
+            Inativo
+          }
+        </td>
+
+       <td>
+
+  <button
+    type="button"
+    (click)="editarProduto(produto)"
+  >
+    Editar
+  </button>
+
+  <button
+    type="button"
+    (click)="alterarStatus(produto)"
+  >
+    @if (produto.ativo) {
+      Desativar
+    } @else {
+      Ativar
+    }
+  </button>
+
+</td>
+
+      </tr>
+
+    }
+
+  </tbody>
+
+</table>

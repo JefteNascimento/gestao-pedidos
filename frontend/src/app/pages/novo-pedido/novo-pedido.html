@@ -1,0 +1,139 @@
+<h1>Novo Pedido</h1>
+@if (mensagem) {
+
+  <div
+    class="mensagem"
+    [class.sucesso]="tipoMensagem === 'sucesso'"
+    [class.erro]="tipoMensagem === 'erro'"
+  >
+    {{ mensagem }}
+  </div>
+
+}
+<div>
+  <label>
+    Cliente:
+
+    <select
+      name="cliente"
+      [(ngModel)]="clienteId"
+    >
+      <option [ngValue]="null">
+        Selecione um cliente
+      </option>
+
+      @for (cliente of clientes; track cliente.id) {
+        <option [ngValue]="cliente.id">
+          {{ cliente.nome }}
+        </option>
+      }
+    </select>
+  </label>
+</div>
+
+<hr>
+
+<h2>Adicionar produto</h2>
+
+<div>
+
+  <label>
+    Produto:
+
+    <select
+      name="produto"
+      [(ngModel)]="produtoId"
+    >
+      <option [ngValue]="null">
+        Selecione um produto
+      </option>
+
+      @for (produto of produtos; track produto.id) {
+        <option [ngValue]="produto.id">
+          {{ produto.nome }} - R$ {{ produto.preco }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Quantidade:
+
+    <input
+      type="number"
+      name="quantidade"
+      [(ngModel)]="quantidade"
+      min="1"
+    >
+  </label>
+
+  <button
+    type="button"
+    (click)="adicionarProduto()"
+  >
+    Adicionar
+  </button>
+
+</div>
+
+<hr>
+
+<h2>Itens do pedido</h2>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>Preço unitário</th>
+      <th>Quantidade</th>
+      <th>Total</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    @for (item of itens; track $index) {
+
+      <tr>
+        <td>{{ item.produto.nome }}</td>
+
+        <td>
+          R$ {{ item.produto.preco }}
+        </td>
+
+        <td>
+          {{ item.quantidade }}
+        </td>
+
+        <td>
+          R$ {{ calcularTotalItem(item) }}
+        </td>
+
+        <td>
+          <button
+            type="button"
+            (click)="removerProduto($index)"
+          >
+            Remover
+          </button>
+        </td>
+      </tr>
+
+    }
+
+  </tbody>
+
+</table>
+
+<h2>
+  Total do pedido: R$ {{ calcularTotalPedido() }}
+</h2>
+
+<button
+  type="button"
+  (click)="finalizarPedido()"
+>
+  Finalizar pedido
+</button>

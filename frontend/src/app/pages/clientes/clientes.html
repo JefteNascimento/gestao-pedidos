@@ -1,0 +1,121 @@
+<h1>Clientes</h1>
+@if (mensagem) {
+
+  <div
+    class="mensagem"
+    [class.sucesso]="tipoMensagem === 'sucesso'"
+    [class.erro]="tipoMensagem === 'erro'"
+  >
+    {{ mensagem }}
+  </div>
+
+}
+<h2>
+  @if (clienteEditandoId !== null) {
+    Editar cliente
+  } @else {
+    Novo cliente
+  }
+</h2>
+
+<form (ngSubmit)="salvarCliente()">
+
+  <div>
+    <label for="nome">
+      Nome
+    </label>
+
+    <input
+      id="nome"
+      type="text"
+      name="nome"
+      [(ngModel)]="novoCliente.nome"
+      required
+    >
+  </div>
+
+  <div>
+    <label for="telefone">
+      Telefone
+    </label>
+
+    <input
+      id="telefone"
+      type="text"
+      name="telefone"
+      [(ngModel)]="novoCliente.telefone"
+      required
+    >
+  </div>
+
+  <button type="submit">
+    @if (clienteEditandoId !== null) {
+      Salvar alteração
+    } @else {
+      Cadastrar
+    }
+  </button>
+
+  @if (clienteEditandoId !== null) {
+
+    <button
+      type="button"
+      (click)="limparFormulario()"
+    >
+      Cancelar
+    </button>
+
+  }
+
+</form>
+
+
+<h2>Clientes cadastrados</h2>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    @for (cliente of clientes; track cliente.id) {
+
+      <tr>
+
+        <td>
+          {{ cliente.id }}
+        </td>
+
+        <td>
+          {{ cliente.nome }}
+        </td>
+
+        <td>
+          {{ cliente.telefone }}
+        </td>
+
+        <td>
+
+          <button
+            type="button"
+            (click)="editarCliente(cliente)"
+          >
+            Editar
+          </button>
+
+        </td>
+
+      </tr>
+
+    }
+
+  </tbody>
+
+</table>

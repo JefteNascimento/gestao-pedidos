@@ -1,0 +1,148 @@
+<h1>Pedidos</h1>
+@if (mensagem) {
+
+  <div
+    class="mensagem"
+    [class.sucesso]="tipoMensagem === 'sucesso'"
+    [class.erro]="tipoMensagem === 'erro'"
+  >
+    {{ mensagem }}
+  </div>
+
+}
+<table>
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Cliente</th>
+      <th>Data</th>
+      <th>Valor</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    @for (pedido of pedidos; track pedido.id) {
+
+      <tr>
+
+        <td>{{ pedido.id }}</td>
+
+        <td>{{ pedido.cliente.nome }}</td>
+
+        <td>{{ pedido.dataCriacao }}</td>
+
+        <td>R$ {{ pedido.valorTotal }}</td>
+
+        <td>{{ pedido.status }}</td>
+
+        <td>
+
+          <button
+            type="button"
+            (click)="verDetalhes(pedido.id)"
+          >
+            Ver detalhes
+          </button>
+
+          @if (
+            pedido.status !== 'FINALIZADO' &&
+            pedido.status !== 'CANCELADO'
+          ) {
+
+            <button
+              type="button"
+              (click)="avancarStatus(pedido)"
+            >
+              Avançar status
+            </button>
+
+            <button
+              type="button"
+              (click)="cancelarPedido(pedido)"
+            >
+              Cancelar
+            </button>
+
+          }
+
+        </td>
+
+      </tr>
+
+    }
+
+  </tbody>
+
+</table>
+
+
+@if (pedidoSelecionado) {
+
+  <hr>
+
+  <h2>
+    Pedido #{{ pedidoSelecionado.id }}
+  </h2>
+
+  <p>
+    <strong>Cliente:</strong>
+    {{ pedidoSelecionado.cliente.nome }}
+  </p>
+
+  <p>
+    <strong>Telefone:</strong>
+    {{ pedidoSelecionado.cliente.telefone }}
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    {{ pedidoSelecionado.status }}
+  </p>
+
+  <p>
+    <strong>Valor total:</strong>
+    R$ {{ pedidoSelecionado.valorTotal }}
+  </p>
+
+  <h3>Itens</h3>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço unitário</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (item of pedidoSelecionado.itens; track item.id) {
+
+        <tr>
+          <td>{{ item.produto.nome }}</td>
+          <td>{{ item.quantidade }}</td>
+          <td>R$ {{ item.precoUnitario }}</td>
+          <td>R$ {{ item.totalItem }}</td>
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+  <button
+    type="button"
+    (click)="fecharDetalhes()"
+  >
+    Fechar detalhes
+  </button>
+
+}
